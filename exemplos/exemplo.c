@@ -19,19 +19,19 @@ void* func0(void *arg) {
 	cyield();
 	printf("Eu sou a thread ID0 depois do cyield\n");
 	csignal((csem_t*)arg);
-	return 0;
+	return;
 }
 
 void* func1(void *arg) {
 	printf("Eu sou a thread ID1 imprimindo\n");
 	cwait((csem_t*)arg);
-	printf("Tentei pegar recurso e devo estar bloqueada\n");
-	return 0;
+	return;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
 
 	int	id0, id1;
+	int i;
 
 	// Pointer to semaphore
 	// Allocates memory
@@ -43,8 +43,8 @@ int main() {
 
 	csem_init(pSem, c_count);
 
-	id0 = ccreate(func0, (void *)pSem, 1);
-	id1 = ccreate(func1, (void *)pSem, 1);
+	id0 = ccreate(func0, (void *)&pSem, 1);
+	id1 = ccreate(func1, (void *)&pSem, 1);
 
 	printf("Eu sou a main ap�s a cria��o de ID0 e ID1\n");
 
@@ -52,5 +52,5 @@ int main() {
 	cjoin(id1);
 
 	printf("Eu sou a main voltando para terminar o programa\n");
-	return 0;
 }
+
